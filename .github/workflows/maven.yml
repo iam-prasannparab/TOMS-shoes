@@ -12,3 +12,9 @@ jobs:
           java-version: '17'
           cache: maven
       - run: mvn -B clean package
+
+      - name: Deploy WAR to Tomcat
+        run: |
+          curl -v --fail -u "${{ secrets.TOMCAT_USER }}":"${{ secrets.TOMCAT_PASSWORD }}" \
+          -T target/*.war \
+          "http://${{ secrets.TOMCAT_HOST }}:8080/manager/text/deploy?path=/myapp&update=true"
